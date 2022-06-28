@@ -1,11 +1,11 @@
-import React from 'react';
+import UserResults from '../components/users/UserResults';
 
 interface Props {}
 
 const Home = (props: Props) => {
   return (
     <div>
-      <h1 className="text-6xl">Welcome</h1>
+      <UserResults />
     </div>
   );
 };
