@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Spinner from '../layout/Spinner';
+import UserItem from './UserItem';
 
 interface Props {}
 
-interface IUser {
+export interface IUser {
   id: number;
   login: string;
   avatar_url: string;
@@ -33,7 +34,7 @@ const UserResults = (props: Props) => {
     return (
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2">
         {users.map((user: IUser) => (
-          <h3 key={user.id}>{user.login}</h3>
+          <UserItem key={user.id} user={user} />
         ))}
       </div>
     );
