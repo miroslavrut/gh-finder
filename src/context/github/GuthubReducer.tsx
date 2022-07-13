@@ -5,33 +5,8 @@ interface State {
   loading: boolean;
 }
 
-// interface ActionA {
-//   type: string;
-//   payload?: IUser[] | [];
-// }
-
-// interface ActionB {
-//   type: string;
-// }
-
-// type Action = ActionA | ActionB;
-// type Action = { type: 'GET_USERS'; payload: object } | { type: 'SET_LOADING' };
-
-export const defaultContext = {
-  users: [],
-  loading: true,
-  fetchUsers: () => {
-    return;
-  },
-};
-
-export enum ActionType {
-  GET_USERS = 'GET_USERS',
-  SET_LOADING = 'SET_LOADING',
-}
-
 export type IAction = {
-  type: 'GET_USERS' | 'SET_LOADING';
+  type: 'GET_USERS' | 'SET_LOADING' | 'CLEAR_USERS';
   payload?: any;
 };
 
@@ -48,6 +23,12 @@ const githubReducer = (state: State, action: IAction) => {
       return {
         ...state,
         loading: true,
+      };
+
+    case 'CLEAR_USERS':
+      return {
+        ...state,
+        users: [],
       };
 
     default:
