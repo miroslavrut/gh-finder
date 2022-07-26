@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import AlertContext from '../../context/alert/AlertContext';
 import GithubContext from '../../context/github/GithubContext';
 
 interface Props {}
@@ -8,6 +9,8 @@ const UserSearch = (props: Props) => {
 
   const { users, searchUsers, clearUsers } = useContext(GithubContext);
 
+  const { setAlert } = useContext(AlertContext);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   };
@@ -16,7 +19,7 @@ const UserSearch = (props: Props) => {
     e.preventDefault();
 
     if (text === '') {
-      alert('Please enter something');
+      setAlert('Please enter something', 'error');
     } else {
       searchUsers(text);
       setText('');
