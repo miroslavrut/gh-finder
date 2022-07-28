@@ -9,6 +9,19 @@ export interface IUser {
   id: number;
   login: string;
   avatar_url: string;
+  type: string;
+  location: string;
+  bio: string;
+  blog: string;
+  twitter_username: string;
+  html_url: string;
+  followers: string;
+  following: string;
+  public_repos: string;
+  public_gists: string;
+  hireable: string;
+  name: string;
+  company: string;
 }
 
 const UserResults = (props: Props) => {

@@ -2,11 +2,13 @@ import { IUser } from '../../components/users/UserResults';
 
 interface State {
   users: IUser[];
+  user: IUser;
   loading: boolean;
+  repos: [];
 }
 
 export type IAction = {
-  type: 'GET_USERS' | 'SET_LOADING' | 'CLEAR_USERS';
+  type: 'GET_USERS' | 'SET_LOADING' | 'CLEAR_USERS' | 'GET_USER' | 'GET_REPOS';
   payload?: any;
 };
 
@@ -29,6 +31,20 @@ const githubReducer = (state: State, action: IAction) => {
       return {
         ...state,
         users: [],
+      };
+
+    case 'GET_USER':
+      return {
+        ...state,
+        user: action.payload,
+        loading: false,
+      };
+
+    case 'GET_REPOS':
+      return {
+        ...state,
+        repos: action.payload,
+        loading: false,
       };
 
     default:

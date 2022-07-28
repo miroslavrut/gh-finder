@@ -1,5 +1,6 @@
 import { createContext, FC, useReducer } from 'react';
 import { IUser } from '../../components/users/UserResults';
+import { IRepo } from '../../components/users/RepoList';
 import githubReducer from './GuthubReducer';
 
 interface props {
@@ -9,17 +10,29 @@ interface props {
 export interface IGithubContext {
   users: IUser[];
   loading: boolean;
+  user: IUser;
+  repos: IRepo[];
   searchUsers: (text: string) => void;
   clearUsers: () => void;
+  getUser: (login: string) => void;
+  getUserRepos: (login: string) => void;
 }
 
 export const GithubDefaultContext = {
   users: [],
+  user: {} as IUser,
+  repos: [],
   loading: true,
   searchUsers: () => {
     return;
   },
   clearUsers: () => {
+    return;
+  },
+  getUser: () => {
+    return;
+  },
+  getUserRepos: () => {
     return;
   },
 };
@@ -33,6 +46,8 @@ const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
 export const GithubProvider: FC<props> = ({ children }) => {
   const initialState = {
     users: [],
+    user: {} as IUser,
+    repos: [],
     loading: false,
   };
 
@@ -57,6 +72,47 @@ export const GithubProvider: FC<props> = ({ children }) => {
     });
   };
 
+  const getUser = async (login: string) => {
+    setLoading();
+
+    const response = await fetch(`${GITHUB_URL}/users/${login}`, {
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+      },
+    });
+
+    if (response.status === 404) {
+      const win: Window = window;
+      win.location = '/notfound';
+    } else {
+      const data = await response.json();
+
+      dispatch({ type: 'GET_USER', payload: data });
+    }
+  };
+
+  const getUserRepos = async (login: string) => {
+    setLoading();
+
+    const params = new URLSearchParams({ sort: 'created', per_page: '10' });
+
+    const response = await fetch(
+      `${GITHUB_URL}/users/${login}/repos?${params}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    dispatch({
+      type: 'GET_REPOS',
+      payload: data,
+    });
+  };
+
   const clearUsers = () => dispatch({ type: 'CLEAR_USERS' });
 
   const setLoading = () => dispatch({ type: 'SET_LOADING' });
@@ -66,8 +122,12 @@ export const GithubProvider: FC<props> = ({ children }) => {
       value={{
         users: state.users,
         loading: state.loading,
+        user: state.user,
+        repos: state.repos,
+        getUserRepos,
         searchUsers,
         clearUsers,
+        getUser,
       }}
     >
       {children}
