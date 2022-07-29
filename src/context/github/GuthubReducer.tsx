@@ -8,7 +8,7 @@ interface State {
 }
 
 export type IAction = {
-  type: 'GET_USERS' | 'SET_LOADING' | 'CLEAR_USERS' | 'GET_USER' | 'GET_REPOS';
+  type: 'GET_USERS' | 'SET_LOADING' | 'CLEAR_USERS' | 'GET_USER_AND_REPOS';
   payload?: any;
 };
 
@@ -33,17 +33,11 @@ const githubReducer = (state: State, action: IAction) => {
         users: [],
       };
 
-    case 'GET_USER':
+    case 'GET_USER_AND_REPOS':
       return {
         ...state,
-        user: action.payload,
-        loading: false,
-      };
-
-    case 'GET_REPOS':
-      return {
-        ...state,
-        repos: action.payload,
+        user: action.payload.user,
+        repos: action.payload.repos,
         loading: false,
       };
 
